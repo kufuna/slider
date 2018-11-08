@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+<header style="display: none;"></header>
+<div id="slider">
+	<div class="first-fragment"></div>
+	<div id="slider-content">
+		<div id="f-slider">
+			<div class="item animate-in" data-index="0">
+				<div class="img" style="background: url(https://picsum.photos/1920/1100) no-repeat; background-position: center; background-size: cover;"></div>
+			</div>
+			<div class="item" data-index="1" >
+				<div class="img" style="background: url(https://picsum.photos/1920/1101) no-repeat; background-position: center; background-size: cover;"></div>
+			</div>
+			<div class="item" data-index="2" >
+				<div class="img" style="background: url(https://picsum.photos/1920/1102) no-repeat; background-position: center; background-size: cover;"></div>
+			</div>
+			<div class="item" data-index="3" >
+				<div class="img" style="background: url(https://picsum.photos/1920/1103) no-repeat; background-position: center; background-size: cover;"></div>
+			</div>
+		</div>
+		<div id="s-slider">
+			<div class="item second" data-index="0">
+				<div class="img">
+					<div class="inner-img" style="background: url(https://picsum.photos/1920/1100) no-repeat; background-position: center; background-size: cover;"></div>
+				</div>	
+			</div>
+			<div class="item third" data-index="1">
+				<div class="img">
+					<div class="inner-img" style="background: url(https://picsum.photos/1920/1101) no-repeat; background-position: center; background-size: cover;"></div>
+				</div>
+			</div>
+			<div class="item " data-index="2">
+				<div class="img">
+					<div class="inner-img" style="background: url(https://picsum.photos/1920/1102) no-repeat; background-position: center; background-size: cover;"></div>
+				</div>
+			</div>
+			<div class="item" data-index="3">
+				<div class="img">
+					<div class="inner-img" style="background: url(https://picsum.photos/1920/1103) no-repeat; background-position: center; background-size: cover;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery.touchSwipe.min.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+
+function detectSize() {
+	var insideHeight = $('#slider-content').outerHeight();
+	var topPosition = $('div#s-slider div.second').offset().top;
+	$('div#s-slider div.item div.img div.inner-img').css({ height : insideHeight + 'px' , top : '-' + topPosition + 'px' })
+	console.log(topPosition);
+}
+detectSize();
+
+var first = 0;
+var second = 1;
+var third = 2;
+var resumeSlider = false;
+var resumeSwipe = false;
+
+var mySlider = function(){
+	if (!resumeSlider) {
+		var length = $('#f-slider .item').length;
+	if (first === length) {
+		first = 0;
+	}if (second === length) {
+		second = 0;
+	}
+	if (third === length) {
+		third = 0;
+	}
+	$('#f-slider .item').removeClass('animate-out');
+	$('#f-slider .item').removeClass('animate-in');
+	$('#s-slider .item').removeClass('first');
+	$('#s-slider .item').removeClass('second');
+	$('#s-slider .item').removeClass('third');
+	$('#f-slider').find("[data-index='" + first + "']").addClass('animate-out');
+	$('#f-slider').find("[data-index='" + second + "']").addClass('animate-in');
+	$('#s-slider').find("[data-index='" + first + "']").addClass('first');
+	$('#s-slider').find("[data-index='" + second + "']").addClass('second');
+	$('#s-slider').find("[data-index='" + third + "']").addClass('third');
+	first++;
+	second++;
+	third++;
+	}
+}
+
+var slider = setInterval(mySlider,4000);
+
+$("#slider-content").swipe( {
+    swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
+
+	    if (direction == 'left' && !resumeSwipe ) {
+	      	
+			if (!resumeSlider) {
+				resumeSwipe = true;
+					mySlider();
+					resumeSlider = true;
+					setTimeout(function() {
+						resumeSlider = false;
+					}, 4000);
+					setTimeout(function() {
+						resumeSwipe = false;
+					}, 2000);
+				}
+
+	    }
+    }
+});
+
+
+})
+
+</script>
+</body>
+</html>
